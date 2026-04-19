@@ -65,8 +65,12 @@ public class HttpController {
                 response.setError(ReplyCode.BADREQ,"HTTP/1.1");
                 return;
             }
-            // Normalize URL
+            // Normalize URL - extract only the path part, removing query string
             String url = request.urlText.toLowerCase();
+            // Remove query string (everything after ?)
+            if (url.contains("?")) {
+                url = url.substring(0, url.indexOf("?"));
+            }
             while (url.startsWith("/")) {
                 url = url.substring(1);
             }
