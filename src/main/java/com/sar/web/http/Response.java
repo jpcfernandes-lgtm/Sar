@@ -85,26 +85,23 @@ public class Response {
 
     /** Sets the headers needed in a reply with a static file content and fill
      * the file property with the File object of the static file to send
-     * @param _f
-     * @param mime_enc */
+     * @param file the file to send
+     * @param contentType the MIME type of the file */
     public void setFileHeaders(File file, String contentType) {
         this.file = file;
-        this.file = null;
-        // header lines not set in 'Headers' object!
-        // ...
-        logger.debug("Header fields not defined in HTTPAnswer.set_file");
+        this.headers.setHeader("Content-Type", contentType);
+        this.headers.setHeader("Content-Length", String.valueOf(file.length()));
     }
 
     /** Sets the headers needed in a reply with a locally generated HTML string
      * (_text object) and fill the text property with the String object 
      * containing the HTML to send
-     * @param _text */
+     * @param text the HTML text to send */
     public void setTextHeaders(String text) {
         this.text = text;
         this.file = null;
-        // header lines not set in 'Headers' object!
-        // ...
-        logger.debug("Header fields not defined in HTTPAnswer.set_text");
+        this.headers.setHeader("Content-Type", "text/html; charset=UTF-8");
+        this.headers.setHeader("Content-Length", String.valueOf(text.length()));
     }
 
         /** Prepares an HTTP answer with an error code
@@ -212,15 +209,16 @@ public class Response {
 
     private void writeFile(PrintStream TextPrinter){
         try (FileInputStream fin = new FileInputStream(file)) {
-            byte [] data = new byte [fin.available()];
-            fin.read( data );  // Read the entire file to buffer 'data'
-            // IMPORTANT - Please modify this code to send a file chunk-by-chunk
-            //             to avoid having CRASHES with BIG FILES
-            logger.info("HTTPAnswer may fail for large files - please modify it");
-            TextPrinter.write(data);
+            // Send file in chunks to avoid memory issues with large files
+            byte[] buffer = new byte[4096];  // 4KB chunks
+            int bytesRead;
+            while ((bytesRead = fin.read(buffer)) != -1) {
+                TextPrinter.write(buffer, 0, bytesRead);
+            }
+            logger.info("File sent successfully: {} bytes", file.length());
         }
-        catch (IOException e ) {
-            System.out.println( "I/O error opeening FileInputStream " + e );
+        catch (IOException e) {
+            logger.error("I/O error reading file: {}", file.getName(), e);
         }
     }
     

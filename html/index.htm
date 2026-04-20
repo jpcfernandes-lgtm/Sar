@@ -227,7 +227,7 @@
       function updateCookieDisplay() {
         const lastGroup = getCookie('lastGroupNumber');
         if (lastGroup) {
-          $('#cookieValue').text(`Last created group: ${lastGroup}`);
+          $('#cookieValue').text(`Last group created: ${lastGroup}`);
         } else {
           $('#cookieValue').text('No cookie set yet');
         }
@@ -257,7 +257,7 @@
                 html += '<tr>';
                 html += '<td>' + escapeHtml(group.groupNumber) + '</td>';
                 
-                // Member 1
+                //Member 1
                 if (group.members && group.members.length > 0) {
                   html += '<td>' + escapeHtml(group.members[0].number || '') + '</td>';
                   html += '<td>' + escapeHtml(group.members[0].name || '') + '</td>';
@@ -265,7 +265,7 @@
                   html += '<td></td><td></td>';
                 }
                 
-                // Member 2
+                //Member 2
                 if (group.members && group.members.length > 1) {
                   html += '<td>' + escapeHtml(group.members[1].number || '') + '</td>';
                   html += '<td>' + escapeHtml(group.members[1].name || '') + '</td>';

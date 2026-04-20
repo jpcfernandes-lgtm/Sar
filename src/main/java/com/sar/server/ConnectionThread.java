@@ -82,7 +82,7 @@ public class ConnectionThread extends Thread  {
                     req.headers.setHeader(headerName, headerValue); 
                 }
             }
-        // check if the Content-Length size is different than zero. If true read the body of the request (that can contain POST data)
+        // Verifica se o Content-Length é diferente de zero. Se sim, lê o corpo do pedido (que pode conter dados POST)
         int clength= 0;
         try {
             String len= req.headers.getHeaderValue("Content-Length");
@@ -91,14 +91,14 @@ public class ConnectionThread extends Thread  {
             else if (!TextReader.ready ())
                 clength= 0;
         } catch (NumberFormatException e) {
-            logger.error("Bad request\n");
+            logger.error("Pedido inválido\n");
             return null;
         }
         if (clength>0) {
-            // Length is not 0 - read data to string
+            // o Content-Length diferente de 0 - lê os dados para string
             String str= new String ();
             char [] cbuf= new char [clength];
-            //the content is not formed by line ended with \n so it need to be read char by char
+            //o conteúdo não é formado por linhas com \n, por isso precisa ser lido caractere a caractere
             int n, cnt= 0;
             while ((cnt<clength) && ((n= TextReader.read (cbuf)) > 0)) {
                 str= str + new String (cbuf);

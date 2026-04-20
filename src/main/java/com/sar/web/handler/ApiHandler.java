@@ -186,13 +186,6 @@ public class ApiHandler extends AbstractRequestHandler {
         }
     }
 
-    /**
-     * Handles DELETE /api - Delete a group.
-     * 
-     * The groupNumber should be extracted from the URL query string (/api?groupNumber=42)
-     * Response should be JSON indicating success or failure.
-     * Appropriate HTTP headers must be set.
-     */
     @Override
     protected void handleDelete(Request request, Response response) {
         logger.debug("DELETE /api - Deleting group");
@@ -208,7 +201,6 @@ public class ApiHandler extends AbstractRequestHandler {
                 for (String param : params) {
                     if (param.startsWith("groupNumber=")) {
                         groupNumberStr = param.substring("groupNumber=".length());
-                        // URL-decode if needed
                         try {
                             groupNumberStr = java.net.URLDecoder.decode(groupNumberStr, "UTF-8");
                         } catch (Exception e) {
@@ -219,7 +211,7 @@ public class ApiHandler extends AbstractRequestHandler {
                 }
             }
             
-            // Validate groupNumber
+            // Valida o groupNumber
             if (groupNumberStr == null || groupNumberStr.trim().isEmpty()) {
                 String errorResponse = "{\"error\":\"O número do grupo é obrigatório\"}";
                 response.setCode(ReplyCode.BADREQ);
@@ -235,10 +227,10 @@ public class ApiHandler extends AbstractRequestHandler {
                 return;
             }
             
-            // Delete the group
+            //Apagar o grupo
             groupService.deleteGroup(groupNumberStr);
             
-            // Return success response
+            // Retorna success 
             String successResponse = "{\"message\":\"Grupo eliminado com sucesso!\"}";
             response.setCode(ReplyCode.OK);
             response.setHeader("Content-Type", "application/json; charset=UTF-8");

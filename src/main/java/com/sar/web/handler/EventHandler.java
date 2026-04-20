@@ -98,10 +98,6 @@ public class EventHandler extends AbstractRequestHandler {
         response.setError(ReplyCode.NOTIMPLEMENTED, request.version);
     }
 
-    /**
-     * DELETE is not used for SSE.
-     * SSE connections should be closed by the client.
-     */
     @Override
     protected void handleDelete(Request request, Response response) {
         response.setError(ReplyCode.NOTIMPLEMENTED, request.version);

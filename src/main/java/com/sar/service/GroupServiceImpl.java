@@ -96,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
             repository.save(group);
             logger.info("Saved group: {}", groupNumber);
 
-            // Integração SSE: Transmite evento para clientes ligados
+            //SSE - transmite evento para as pessoas ligadas
             String eventType = isNewGroup ? "group.created" : "group.updated";
             String eventData = formatGroupAsJson(group, eventType);
             eventBroadcaster.broadcast(eventData);
@@ -113,7 +113,7 @@ public class GroupServiceImpl implements GroupService {
             repository.delete(groupNumber);
             logger.info("Deleted group: {}", groupNumber);
             
-            // Integração SSE: Transmite evento de eliminação para clientes ligados
+            //SSE - transmite evento delete para as pessoas ligadas
             String eventData = "{\"type\":\"group.deleted\",\"groupNumber\":\"" + groupNumber + "\"}";
             eventBroadcaster.broadcast(eventData);
             
@@ -128,7 +128,7 @@ public class GroupServiceImpl implements GroupService {
         try {
             repository.incrementAccessCount(groupNumber);
             
-            // Integração SSE: Transmite evento de acesso para clientes ligados
+            //SSE - transmite evento de acesso para as pessoas ligadas
             String eventData = "{\"type\":\"group.accessed\",\"groupNumber\":\"" + groupNumber + "\"}";
             eventBroadcaster.broadcast(eventData);
             
